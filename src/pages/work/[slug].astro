@@ -1,0 +1,94 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CaseFigure from '../../components/figures/CaseFigure.astro';
+import { withBase } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+  return work.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: work[(i + 1) % work.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { title, org, role, period, summary, figure, results, tools } = entry.data;
+const { Content } = await render(entry);
+---
+
+<Base title={title} description={summary}>
+  <article>
+    <header class="wrap pt-10 pb-14 sm:pt-14">
+      <a class="link text-sm text-muted" href={withBase('/#work')}>← All work</a>
+      <p class="eyebrow mt-10">{org} &nbsp;·&nbsp; {period}</p>
+      <h1 class="display mt-4 max-w-4xl text-[clamp(2.3rem,5.6vw,4.5rem)]" transition:name={`title-${entry.id}`}>{title}</h1>
+      <p class="mt-6 max-w-2xl text-lg text-muted" data-reveal>{summary}</p>
+      <p class="mt-3 text-sm text-muted" data-reveal style="--i:1">{role}</p>
+    </header>
+
+    <div class="wrap">
+      <div class="case-figure" transition:name={`figure-${entry.id}`}>
+        <div class="mx-auto max-w-xl">
+          <CaseFigure name={figure} />
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <dl class="grid gap-x-8 gap-y-8 py-14 sm:grid-cols-3">
+        {
+          results.map((r, i) => (
+            <div class="flex flex-col-reverse justify-end border-t border-ink pt-4" data-reveal style={`--i:${i}`}>
+              <dt class="mt-2 text-sm text-muted">{r.label}</dt>
+              <dd class="display text-[clamp(2.2rem,4.5vw,3.25rem)] text-accent">{r.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="wrap grid gap-x-16 gap-y-12 pb-20 lg:grid-cols-[1fr_16rem]">
+      <div class="prose" data-reveal>
+        <Content />
+      </div>
+      <aside data-reveal style="--i:1">
+        <h2 class="eyebrow mb-4">Tools and methods</h2>
+        <ul class="flex flex-wrap gap-2">
+          {tools.map((tool) => <li class="tag">{tool}</li>)}
+        </ul>
+      </aside>
+    </div>
+
+    <div class="border-t border-line">
+      <a class="next-case wrap block py-14" href={withBase(`/work/${next.id}/`)}>
+        <p class="eyebrow">Next case study</p>
+        <p class="display mt-3 text-[clamp(1.7rem,3.6vw,2.75rem)]">
+          {next.data.title} <span class="next-arrow" aria-hidden="true">→</span>
+        </p>
+      </a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .case-figure {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+  }
+  .next-case {
+    transition: color 0.3s ease;
+  }
+  .next-case:hover {
+    color: var(--accent);
+  }
+  .next-arrow {
+    display: inline-block;
+    transition: transform 0.35s var(--ease);
+  }
+  .next-case:hover .next-arrow {
+    transform: translateX(8px);
+  }
+</style>

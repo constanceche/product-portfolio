@@ -1,0 +1,29 @@
+---
+import { education, profile } from '../data/resume';
+import { withBase } from '../lib/paths';
+---
+
+<section class="section">
+  <div class="wrap grid gap-x-10 gap-y-3 md:grid-cols-[11rem_1fr]">
+    <p class="eyebrow pt-1.5" data-reveal><span class="text-accent">07</span> &nbsp;/&nbsp; Education</p>
+    <div data-reveal style="--i:1">
+      <h2 class="display text-2xl">{education.degree}</h2>
+      <p class="mt-1 text-muted">{education.school} · {education.college}</p>
+      <p class="mt-1 text-sm text-muted">{education.period}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <p class="eyebrow mb-6" data-reveal><span class="text-accent">08</span> &nbsp;/&nbsp; Contact</p>
+    <h2 class="display max-w-4xl text-[clamp(2.2rem,6vw,4.5rem)]" data-reveal style="--i:1">
+      Have a product that needs someone who can scope it, build it, and grow it?
+    </h2>
+    <div class="mt-10 flex flex-wrap items-center gap-3" data-reveal style="--i:2">
+      <a class="btn btn-solid" href={`mailto:${profile.email}`}>{profile.email} <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href={withBase(profile.resumeFile)} target="_blank" rel="noopener">Résumé (PDF)</a>
+    </div>
+  </div>
+</section>

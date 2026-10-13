@@ -1,0 +1,102 @@
+---
+interface Props {
+  name: 'network' | 'tiers' | 'ads';
+}
+const { name } = Astro.props;
+
+const spokes = [
+  { x: 56, y: 56, label: 'Volunteers', lx: 56, ly: 96, anchor: 'middle', d: 300 },
+  { x: 264, y: 56, label: 'Hotels', lx: 264, ly: 96, anchor: 'middle', d: 450 },
+  { x: 160, y: 164, label: 'Shelters', lx: 190, ly: 168, anchor: 'start', d: 600 },
+];
+const hub = { x: 160, y: 92 };
+const tiers = [
+  { y: 62, w: 92, label: 'A', d: 500 },
+  { y: 92, w: 62, label: 'B', d: 650 },
+  { y: 122, w: 36, label: 'C', d: 800 },
+];
+---
+
+<svg class="fig h-auto w-full" viewBox="0 0 320 200" data-draw aria-hidden="true">
+  {
+    name === 'network' && (
+      <>
+        {/* three groups connected through one platform */}
+        {spokes.map((s) => (
+          <>
+            <line class="draw acc" pathLength="1" style={`--d:${s.d}`} x1={hub.x} y1={hub.y} x2={s.x} y2={s.y} />
+            <circle class="pulse fill-acc" r="3">
+              <animateMotion dur="3.2s" begin={`${s.d / 300}s`} repeatCount="indefinite" path={`M ${s.x} ${s.y} L ${hub.x} ${hub.y}`} />
+            </circle>
+          </>
+        ))}
+        {spokes.map((s) => (
+          <>
+            <g transform={`translate(${s.x} ${s.y})`}>
+              <g class="pop" style={`--d:${s.d + 300}`}>
+                <circle class="fill-bg" r="18" />
+                <circle cy="-4" r="4.5" />
+                <path d="M -8 9 C -8 2 8 2 8 9" />
+              </g>
+            </g>
+            <text x={s.lx} y={s.ly} text-anchor={s.anchor}>
+              {s.label}
+            </text>
+          </>
+        ))}
+        <g transform={`translate(${hub.x} ${hub.y})`}>
+          <g class="pop" style="--d:100">
+            <rect class="fill-bg acc" x="-26" y="-19" width="52" height="38" rx="5" />
+            <line class="acc" x1="-26" y1="-9" x2="26" y2="-9" />
+            <line x1="-17" y1="0" x2="8" y2="0" />
+            <line x1="-17" y1="8" x2="-2" y2="8" />
+          </g>
+        </g>
+      </>
+    )
+  }
+  {
+    name === 'tiers' && (
+      <>
+        {/* dashboard: customer tiers on the left, trend on the right */}
+        <rect class="draw" pathLength="1" x="20" y="20" width="280" height="160" rx="8" />
+        <line class="draw" pathLength="1" style="--d:200" x1="20" y1="42" x2="300" y2="42" />
+        <circle class="pop fill-acc" style="--d:350" cx="33" cy="31" r="2.5" />
+        <line class="draw soft" pathLength="1" style="--d:300" x1="160" y1="54" x2="160" y2="168" />
+        {tiers.map((t) => (
+          <>
+            <text x="36" y={t.y + 11}>
+              {t.label}
+            </text>
+            <rect class="grow fill-acc" style={`--d:${t.d}`} x="52" y={t.y} width={t.w} height="14" rx="3" opacity={t.label === 'A' ? 1 : t.label === 'B' ? 0.6 : 0.3} />
+          </>
+        ))}
+        <path class="draw soft" pathLength="1" style="--d:400" d="M 178 60 V 160 H 284" />
+        <path class="draw acc" pathLength="1" stroke-width="2" style="--d:700" d="M 186 146 C 204 142 208 124 226 122 C 244 120 246 100 262 92 C 270 88 274 78 280 70" />
+        <circle class="pop fill-acc" style="--d:1500" cx="280" cy="70" r="3.5" />
+      </>
+    )
+  }
+  {
+    name === 'ads' && (
+      <>
+        {/* search bar above a curve that takes off */}
+        <rect class="draw" pathLength="1" x="40" y="22" width="240" height="34" rx="17" />
+        <g class="pop" style="--d:400">
+          <circle cx="60" cy="38" r="6" />
+          <line x1="64.5" y1="42.5" x2="69" y2="47" />
+        </g>
+        <line class="draw" pathLength="1" style="--d:500" x1="82" y1="39" x2="170" y2="39" />
+        <line class="blink acc" x1="178" y1="32" x2="178" y2="46" />
+        <path class="draw soft" pathLength="1" style="--d:300" d="M 40 80 V 176 H 280" />
+        <line class="soft" stroke-dasharray="2 5" x1="150" y1="84" x2="150" y2="176" />
+        <path class="draw acc" pathLength="1" stroke-width="2" style="--d:800" d="M 48 164 C 80 162 110 160 150 156 C 190 150 220 120 268 88" />
+        <path class="draw acc" pathLength="1" stroke-width="2" style="--d:1700" d="M 254 88 H 268 V 102" />
+        <circle class="pop fill-acc" style="--d:1200" cx="150" cy="156" r="3.5" />
+        <text x="150" y="194" text-anchor="middle">
+          Conversion goal
+        </text>
+      </>
+    )
+  }
+</svg>

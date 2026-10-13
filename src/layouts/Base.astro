@@ -1,0 +1,77 @@
+---
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import { withBase } from '../lib/paths';
+import { profile } from '../data/resume';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = profile.description } = Astro.props;
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} · Product`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <!-- Sets theme and the motion flag before first paint, and again after each page swap -->
+    <script is:inline>
+      (function () {
+        if (window.__rootFlags) return;
+        window.__rootFlags = true;
+        function apply() {
+          var root = document.documentElement;
+          var theme = null;
+          try {
+            theme = localStorage.getItem('theme');
+          } catch (e) {}
+          if (theme !== 'light' && theme !== 'dark') {
+            theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          root.dataset.theme = theme;
+          root.classList.toggle('motion', !matchMedia('(prefers-reduced-motion: reduce)').matches);
+        }
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+      })();
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="progress fixed top-0 left-0 z-50 h-0.5 w-full bg-accent" data-progress aria-hidden="true"></div>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <footer class="border-t border-line">
+      <div class="wrap flex flex-col gap-2 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+        <p>© {new Date().getFullYear()} {profile.name}</p>
+        <p class="flex gap-5">
+          <a class="link" href={`mailto:${profile.email}`}>Email</a>
+          <a class="link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          <a class="link" href={withBase(profile.resumeFile)} target="_blank" rel="noopener">Résumé</a>
+        </p>
+      </div>
+    </footer>
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

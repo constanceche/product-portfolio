@@ -1,0 +1,84 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { experience } from '../data/resume';
+import { withBase } from '../lib/paths';
+---
+
+<section class="section" id="experience">
+  <div class="wrap">
+    <SectionHeading index="03" label="Experience" title="Where I've worked." />
+    <div class="timeline" data-timeline>
+      <span class="timeline-rail" aria-hidden="true"><span class="timeline-line" data-timeline-line></span></span>
+      <ol>
+      {
+        experience.map((job) => (
+          <li class="timeline-item" data-reveal>
+            <span class="timeline-dot" aria-hidden="true" />
+            <div class="grid gap-x-10 gap-y-2 md:grid-cols-[11rem_1fr]">
+              <p class="eyebrow pt-1.5">{job.period}</p>
+              <div>
+                <h3 class="display text-2xl">{job.role}</h3>
+                <p class="mt-1 text-sm text-muted">
+                  {job.org} &nbsp;·&nbsp; {job.location}
+                </p>
+                <p class="mt-3 max-w-2xl">{job.summary}</p>
+                {job.caseStudy && (
+                  <a class="link mt-3 inline-block text-sm font-medium" href={withBase(`/work/${job.caseStudy}/`)}>
+                    Case study →
+                  </a>
+                )}
+              </div>
+            </div>
+          </li>
+        ))
+      }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .timeline-rail {
+    position: absolute;
+    left: 5px;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 1px;
+    background: var(--line);
+  }
+  .timeline-line {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: top;
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: calc(-2rem + 0.5px);
+    top: 0.6rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--accent);
+  }
+  :global(.motion) .timeline-dot {
+    transform: scale(0);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s, background-color 0.4s ease 0.4s;
+  }
+  :global(.motion) .is-in .timeline-dot {
+    transform: scale(1);
+    background: var(--accent);
+  }
+</style>

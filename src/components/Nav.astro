@@ -1,0 +1,58 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { withBase } from '../lib/paths';
+
+const links = [
+  { href: withBase('/#work'), label: 'Work' },
+  { href: withBase('/#experience'), label: 'Experience' },
+  { href: withBase('/#skills'), label: 'Skills' },
+  { href: withBase('/#contact'), label: 'Contact' },
+];
+---
+
+<header class="site-header sticky top-0 z-40 border-b border-line">
+  <div class="wrap flex h-16 items-center justify-between gap-4">
+    <a href={withBase('/')} class="font-display text-lg tracking-tight" aria-label="Constance Chen, home">
+      <span class="sm:hidden">CC</span>
+      <span class="hidden sm:inline">Constance Chen</span>
+    </a>
+    <div class="flex items-center gap-3 sm:gap-6">
+      <nav class="relative flex gap-4 text-sm sm:gap-7" data-nav aria-label="Main">
+        {links.map((l) => <a href={l.href} class="nav-link py-2">{l.label}</a>)}
+        <span class="nav-indicator" data-nav-indicator aria-hidden="true"></span>
+      </nav>
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.4s ease;
+  }
+  .nav-link {
+    color: var(--muted);
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--ink);
+  }
+  /* One underline that slides between links; positioned by scripts/motion.ts */
+  .nav-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    height: 1px;
+    width: 0;
+    background: var(--accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  :global(.motion) .nav-indicator {
+    transition: transform 0.35s var(--ease), width 0.35s var(--ease), opacity 0.2s ease;
+  }
+</style>

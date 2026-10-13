@@ -1,0 +1,56 @@
+---
+// Hero figure: one line running through the three things the site is about.
+const nodes = [
+  { x: 90, y: 330, n: '01', label: 'Discover', d: 500 },
+  { x: 240, y: 210, n: '02', label: 'Build', d: 1000 },
+  { x: 390, y: 90, n: '03', label: 'Launch', d: 1500 },
+];
+---
+
+<svg class="fig h-auto w-full" viewBox="0 0 480 420" data-draw role="img" aria-label="A line running through three steps: discover, build, launch">
+  <!-- faint guide lines -->
+  <g class="soft" stroke-dasharray="2 6">
+    <line x1="90" y1="20" x2="90" y2="400"></line>
+    <line x1="240" y1="20" x2="240" y2="400"></line>
+    <line x1="390" y1="20" x2="390" y2="400"></line>
+  </g>
+
+  <path
+    class="draw acc"
+    pathLength="1"
+    stroke-width="2"
+    style="--d:200; transition-duration: 2.2s, 0.15s"
+    d="M 20 380 C 50 380 60 330 90 330 C 170 330 160 210 240 210 C 320 210 310 90 390 90 C 420 90 435 62 460 40"
+  ></path>
+  <path class="draw acc" pathLength="1" stroke-width="2" style="--d:1900" d="M 444 40 H 460 V 56"></path>
+
+  {
+    nodes.map((node) => (
+      <g transform={`translate(${node.x} ${node.y})`}>
+        <g class="pop" style={`--d:${node.d}`}>
+          <circle class="fill-bg" r="30" />
+          {node.label === 'Discover' && (
+            <g>
+              <circle cx="-3" cy="-3" r="8" />
+              <line x1="3.5" y1="3.5" x2="11" y2="11" />
+            </g>
+          )}
+          {node.label === 'Build' && <path d="M -6 -8 L -13 0 L -6 8 M 6 -8 L 13 0 L 6 8 M 2.5 -10 L -2.5 10" />}
+          {node.label === 'Launch' && <path d="M -9 9 L 9 -9 M -2 -9 H 9 V 2" />}
+          <text x="0" y="-42" text-anchor="middle" style="fill: var(--accent)">
+            {node.n}
+          </text>
+          <text x="0" y="52" text-anchor="middle">
+            {node.label}
+          </text>
+        </g>
+      </g>
+    ))
+  }
+
+  <!-- small drifting shapes -->
+  <g transform="translate(150 110)"><path class="float" style="--d:0" d="M -7 0 H 7 M 0 -7 V 7"></path></g>
+  <g transform="translate(335 290)"><rect class="float acc" style="--d:1800" x="-7" y="-7" width="14" height="14" rx="2"></rect></g>
+  <g transform="translate(60 180)"><circle class="float" style="--d:3200" r="6"></circle></g>
+  <g transform="translate(430 200)"><path class="float" style="--d:900" d="M -7 6 L 0 -7 L 7 6 Z"></path></g>
+</svg>

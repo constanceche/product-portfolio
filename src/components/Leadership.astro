@@ -1,0 +1,25 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { leadership } from '../data/resume';
+---
+
+<section class="section">
+  <div class="wrap">
+    <SectionHeading index="05" label="Leadership" title="Four years leading the Asian Student Union." />
+    <div class="grid gap-x-10 gap-y-6 md:grid-cols-[11rem_1fr]">
+      <div data-reveal>
+        <p class="eyebrow">{leadership.period}</p>
+        <p class="mt-2 text-sm text-muted">{leadership.role}, {leadership.org}</p>
+      </div>
+      <ul class="max-w-2xl">
+        {
+          leadership.points.map((point, i) => (
+            <li class="border-t border-line py-4 first:border-t-0 first:pt-0" data-reveal style={`--i:${i}`}>
+              {point}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

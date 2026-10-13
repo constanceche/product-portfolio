@@ -1,0 +1,55 @@
+---
+const rays = [0, 45, 90, 135, 180, 225, 270, 315];
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch between light and dark theme">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <mask id="moon-mask">
+      <rect width="24" height="24" fill="white"></rect>
+      <circle class="moon-cut" cx="26" cy="4" r="7" fill="black"></circle>
+    </mask>
+    <circle class="sun-core" cx="12" cy="12" r="4.5" fill="currentColor" mask="url(#moon-mask)"></circle>
+    <g class="sun-rays" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      {rays.map((r) => <line x1="12" y1="2.5" x2="12" y2="4.5" transform={`rotate(${r} 12 12)`} />)}
+    </g>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .sun-core,
+  .sun-rays,
+  .moon-cut {
+    transform-box: view-box;
+    transform-origin: 12px 12px;
+  }
+  :global(.motion) .sun-core,
+  :global(.motion) .sun-rays,
+  :global(.motion) .moon-cut {
+    transition: transform 0.6s var(--ease), opacity 0.4s ease;
+  }
+  /* Dark theme: the core grows, the mask slides in to carve a crescent, the rays spin out */
+  :global([data-theme='dark']) .sun-core {
+    transform: scale(1.7);
+  }
+  :global([data-theme='dark']) .moon-cut {
+    transform: translate(-9px, 5px);
+  }
+  :global([data-theme='dark']) .sun-rays {
+    transform: rotate(90deg) scale(0.4);
+    opacity: 0;
+  }
+</style>

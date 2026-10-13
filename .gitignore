@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+.env.*
+
+# Source resume; the published copy lives in public/
+/Chen Constance Product.pdf

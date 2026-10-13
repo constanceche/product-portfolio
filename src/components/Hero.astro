@@ -1,0 +1,36 @@
+---
+import PathFigure from './figures/PathFigure.astro';
+import { profile } from '../data/resume';
+import { withBase } from '../lib/paths';
+
+const words = profile.tagline.split(' ');
+---
+
+<section class="wrap grid items-center gap-10 pt-14 pb-20 sm:pt-20 lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:pb-28">
+  <div>
+    <p class="eyebrow hero-fade mb-6" style="--i:-5">{profile.name} &nbsp;/&nbsp; Product · Engineering · Growth</p>
+    <h1 class="display text-[clamp(2.6rem,6.6vw,5.25rem)]" aria-label={profile.tagline}>
+      {
+        words.map((word, i) => (
+          <>
+            <span class="hero-word" style={`--i:${i}`} aria-hidden="true">
+              {word}
+            </span>{' '}
+          </>
+        ))
+      }
+    </h1>
+    <p class="hero-fade mt-7 max-w-xl text-lg text-muted" style="--i:1">{profile.intro}</p>
+    <div class="hero-fade mt-9 flex flex-wrap items-center gap-3" style="--i:2">
+      <a class="btn btn-solid" href="#work">See my work <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn" href={withBase(profile.resumeFile)} target="_blank" rel="noopener">Résumé</a>
+      <span class="flex gap-5 px-2 text-sm">
+        <a class="link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+        <a class="link" href={`mailto:${profile.email}`}>Email</a>
+      </span>
+    </div>
+  </div>
+  <div class="mx-auto w-full max-w-md lg:max-w-none">
+    <PathFigure />
+  </div>
+</section>

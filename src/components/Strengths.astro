@@ -1,0 +1,22 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import StrengthIcon from './figures/StrengthIcon.astro';
+import { strengths } from '../data/resume';
+---
+
+<section class="section">
+  <div class="wrap">
+    <SectionHeading index="01" label="What I bring" title="Product first, with the engineering and growth skills to back it up." />
+    <div class="grid gap-10 md:grid-cols-3 md:gap-8">
+      {
+        strengths.map((s, i) => (
+          <article class="border-t border-ink pt-6" data-reveal style={`--i:${i}`}>
+            <StrengthIcon name={s.icon} />
+            <h3 class="display mt-5 text-2xl">{s.title}</h3>
+            <p class="mt-3 text-muted">{s.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

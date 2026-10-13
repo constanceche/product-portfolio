@@ -1,0 +1,13 @@
+---
+interface Props {
+  index: string;
+  label: string;
+  title: string;
+}
+const { index, label, title } = Astro.props;
+---
+
+<div class="mb-10 sm:mb-14">
+  <p class="eyebrow mb-4" data-reveal><span class="text-accent">{index}</span> &nbsp;/&nbsp; {label}</p>
+  <h2 class="display max-w-3xl text-[clamp(1.9rem,4.2vw,3.25rem)]" data-reveal style="--i:1">{title}</h2>
+</div>

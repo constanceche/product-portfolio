@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CaseFigure from './figures/CaseFigure.astro';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+  index: number;
+}
+const { entry, index } = Astro.props;
+const { title, org, period, summary, figure } = entry.data;
+---
+
+<a class="work-card group block" href={withBase(`/work/${entry.id}/`)} data-reveal data-tilt style={`--i:${index}`}>
+  <div class="work-figure" transition:name={`figure-${entry.id}`}>
+    <div class="work-figure-inner">
+      <CaseFigure name={figure} />
+    </div>
+  </div>
+  <p class="eyebrow mt-5">{org} &nbsp;·&nbsp; {period}</p>
+  <h3 class="display mt-2 text-2xl" transition:name={`title-${entry.id}`}>{title}</h3>
+  <p class="mt-3 text-muted">{summary}</p>
+  <p class="mt-4 text-sm font-medium">
+    Read case study <span class="work-arrow" aria-hidden="true">→</span>
+  </p>
+</a>
+
+<style>
+  .work-figure {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 1.25rem;
+    overflow: hidden;
+    transition: border-color 0.35s var(--ease), transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  }
+  .work-card:hover .work-figure,
+  .work-card:focus-visible .work-figure {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--ink) 45%, transparent);
+  }
+  /* --mx / --my are set from the pointer position by scripts/motion.ts */
+  .work-figure-inner {
+    transform: translate(calc(var(--mx, 0) * 8px), calc(var(--my, 0) * 8px));
+    transition: transform 0.4s var(--ease);
+  }
+  .work-arrow {
+    display: inline-block;
+    transition: transform 0.3s var(--ease);
+  }
+  .work-card:hover .work-arrow {
+    transform: translateX(4px);
+    color: var(--accent);
+  }
+</style>
